@@ -1,4 +1,3 @@
-import cv2
 from fastapi.exceptions import HTTPException
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
@@ -10,6 +9,7 @@ from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.notification import sent_notification
+import cv2
 origins = [
     "http://localhost",
     "http://localhost:5173",
