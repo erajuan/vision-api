@@ -1,3 +1,5 @@
 fastapi
 uvicorn[standard]
 python-multipart
+opencv-python==4.8.1.78
+pusher==3.3.2
