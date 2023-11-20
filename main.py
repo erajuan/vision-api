@@ -15,7 +15,7 @@ origins = [
     "http://localhost:5173",
     "http://localhost:8080",
     "https://d290-2800-4b0-9902-9df6-15d7-abf-40c6-1813.ngrok.io",
-    "*",
+    "https://madays.github.io",
 ]
 
 app = FastAPI()
