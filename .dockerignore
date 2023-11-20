@@ -1,0 +1,36 @@
+# Git
+.git
+.gitignore
+
+# Build step outputs
+build
+.happypack
+
+# Docker configuration
+Dockerfile
+Makefile
+docker-compose.yml
+
+# NPM dependencies
+node_modules
+
+# Other
+README.md
+.vscode
+.editorconfig
+.ebextensions
+.env
+task.env
+logging.conf
+web.config
+data
+*.idea
+*.sql
+*.pyc
+__pycache__/
+*.py[cod]
+venv
+.venv
+*.png
+*.jpeg
+*.jpg

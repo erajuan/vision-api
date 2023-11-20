@@ -1,0 +1,21 @@
+__pycache__/
+api.egg-info/
+*.py[cod]
+*$py.class
+.idea
+*.db
+tmp
+# Environments
+.env
+.venv
+env/
+venv/
+ENV
+*.json
+*.sql
+*.png
+*.jpeg
+*.jpg
+data
+customapi.egg-info
+*.swp
