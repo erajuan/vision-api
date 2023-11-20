@@ -13,6 +13,7 @@ RUN apt-get update -y && \
     libffi-dev \
     libpcre3-dev
 
+RUN apt-get install -y libglib2.0-0
 RUN apt-get install -y gcc libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
