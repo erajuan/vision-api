@@ -1,12 +1,14 @@
 from fastapi.exceptions import HTTPException
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
+import os
 
 import uuid
 from fastapi import FastAPI, File, UploadFile, Header, Response
 import shutil
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
+from src.eyes import is_the_person_asleep
 
 from src.notification import sent_notification
 import cv2
@@ -29,6 +31,8 @@ app.add_middleware(
 )
 manager = None
 
+def get_filepath(filename: str) -> str:
+    return f"{os.getcwd()}/{filename}"
 
 @app.get("/")
 def home():
@@ -40,8 +44,9 @@ def read_item(file: UploadFile):
     if file.content_type not in ["image/jpg", "image/jpeg", "image/png"]:
         raise HTTPException(status_code=400, detail="Invalid file type")
     filepath = _save_image(upload_file=file)
-    sent_notification(channel="humanState", event_name="dreamState", data={"status": "sleepy", "filename": f"/{filepath}", "live": "/video-live", "video": "/video"})
-    return {"message": "sleep", "filename": file.filename}
+    person = is_the_person_asleep(filename=get_filepath(filepath))
+    sent_notification(channel="humanState", event_name="dreamState", data={"status": "sleepy", "filename": f"/{filepath}", "live": "/video-live", "video": "/video", "person": person})
+    return {"filename": file.filename, "person": person}
 
 def _save_image(upload_file: UploadFile)->str:
     content_type = upload_file.content_type.split("/")
@@ -68,9 +73,8 @@ async def video_endpoint(range: str = Header(None)):
         }
         return Response(data, status_code=206, headers=headers, media_type="video/mp4")
 
-camera = cv2.VideoCapture("/dev/video2")
 
-def gen_frames():
+def gen_frames(camera):
     while True:
         success, frame = camera.read()
         if not success:
@@ -84,4 +88,5 @@ def gen_frames():
 
 @app.get("/video-live")
 async def video_live():
-    return StreamingResponse(gen_frames(), media_type='multipart/x-mixed-replace; boundary=frame')
+    camera = cv2.VideoCapture("/dev/video2")
+    return StreamingResponse(gen_frames(camera=camera), media_type='multipart/x-mixed-replace; boundary=frame')
